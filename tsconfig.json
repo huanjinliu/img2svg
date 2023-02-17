@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "lib": ["dom", "es2015.promise", "es5", "ES2021"],
+    "moduleResolution": "node",
+    "module": "ES2015",
+    "declaration": false,
+    "outDir": "./dist",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "noImplicitAny": false,
+    "noImplicitThis": false,
+    "skipLibCheck": true
+  },
+  "include": ["src/**/*.ts", "web/**/*.ts"]
+}
