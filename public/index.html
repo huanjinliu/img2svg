@@ -9,6 +9,7 @@
       .images {
         display: flex;
         align-items: center;
+        margin: 10px 0;
       }
       .images > div {
         flex: 1;
@@ -27,6 +28,12 @@
       .images img {
         width: 100%;
         object-fit: contain;
+        display: block;
+      }
+      #effect svg {
+        width: 100%;
+        height: 100%;
+        display: block;
       }
     </style>
   </head>
@@ -34,11 +41,11 @@
     <div class="images">
       <div>
         <h5>原图</h5>
-        <img id="source" src="/images/boy.png">
+        <img id="source" src="/images/helloworld.png">
       </div>
       <div>
         <h5>效果图</h5>
-        <img id="effect">
+        <div id="effect">
       </div>
     </div>
     <script src="./index.js" async></script>

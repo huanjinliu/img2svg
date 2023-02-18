@@ -2,9 +2,10 @@ import imageToSvg from 'image-to-svg';
 
 const main = () => {
   const sourceImage = document.querySelector('#source') as HTMLImageElement
-  const effectImage = document.querySelector('#effect') as HTMLImageElement
+  const effect = document.querySelector('#effect') as HTMLDivElement
 
-  effectImage.src = imageToSvg(sourceImage)
+  const svg = imageToSvg(sourceImage)
+  if (svg) effect.appendChild(svg)
 }
 
 main()
