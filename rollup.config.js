@@ -1,11 +1,11 @@
-import baseBuild from './build/base.build.js';
-import webBuild from './build/web.build.js';
+import prod from './build/prod.build.js';
+import dev from './build/dev.build.js';
 
 /**
  * 打包队列
  */
-const buildQueue = [baseBuild];
+const buildQueue = [prod];
 
-if (process.env.NODE_ENV === 'development') buildQueue.push(webBuild);
+if (process.env.NODE_ENV === 'development') buildQueue.push(dev);
 
 export default buildQueue;

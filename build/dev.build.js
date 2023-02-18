@@ -4,9 +4,10 @@ import commonjs from '@rollup/plugin-commonjs';
 import typescript from '@rollup/plugin-typescript';
 import serve from 'rollup-plugin-serve';
 import livereload from 'rollup-plugin-livereload';
+import copy from 'rollup-plugin-copy';
 
 const config = {
-  input: 'web/index.ts',
+  input: 'example/index.ts',
   output: [
     {
       file: 'public/index.js',
@@ -16,6 +17,14 @@ const config = {
   plugins: [
     resolve(),
     commonjs(),
+    copy({
+      targets: [
+        {
+          src: 'example/images',
+          dest: 'public'
+        }
+      ]
+    }),
     typescript({
       compilerOptions: {
         declaration: false
