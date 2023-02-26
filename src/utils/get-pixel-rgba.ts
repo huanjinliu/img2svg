@@ -1,3 +1,10 @@
+export type RGBA = {
+  r: number;
+  g: number;
+  b: number;
+  a: number;
+}
+
 /**
  * 获取图像某个位置像素的色彩值
  * @param imageData 图像像素数据
@@ -5,9 +12,10 @@
  * @param col 像素点所在列
  * @returns 像素点色值(RGBA)
  */
-const getPixelRGBA = (imageData: ImageData, row: number, col: number) => {
+const getPixelRGBA = (imageData: ImageData, row: number, col: number): RGBA | void => {
   const { data, width } = imageData
   const index = row * width * 4 + col * 4
+  if (index < 0) return;
   return {
     r: data[index],
     g: data[index + 1],

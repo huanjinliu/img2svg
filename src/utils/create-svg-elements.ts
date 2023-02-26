@@ -1,9 +1,14 @@
 
-const SVG_NAMESPACE = "http://www.w3.org/2000/svg"
+export const SVG_NAMESPACE = "http://www.w3.org/2000/svg"
+
+export type Point = {
+  x: number;
+  y: number;
+}
 
 /**
  * 创建一个带矩形色块基本的svg
- * @param options 配置属性
+ * @param attrs 配置属性
  * @returns svg元素
  */
 export const createSvgElement = (attrs: {
@@ -23,7 +28,7 @@ export const createSvgElement = (attrs: {
 
 /**
  * 创建一个矩形色块
- * @param options 配置属性
+ * @param attrs 配置属性
  * @returns 矩形色块
  */
 export const createRectElement = (attrs: {
@@ -44,4 +49,59 @@ export const createRectElement = (attrs: {
   rect.setAttribute('fill-opacity', `${opacity}`)
 
   return rect
+}
+
+/**
+ * 创建一个填充色块路径区域
+ * @param attrs 配置属性
+ * @returns 路径区域
+ */
+export const createPathElement = (attrs: {
+  path: Point[],
+  clipPaths?: Point[][],
+  fill?: string,
+  opacity?: number,
+}) => {
+  const { path, clipPaths = [], fill = '#000', opacity = 1 } = attrs;
+  const pathElement = document.createElementNS(SVG_NAMESPACE, 'path')
+
+  // 创建路径点
+  const createPath = (points: Point[]) => points.reduce<string>((result, point, index, arr) => {
+    if (index === 0) return `M${point.x},${point.y}`
+
+    const prePoint = arr[index - 1]
+    const nextPoint = arr[index + 1]
+    // 如果点居于中间则无需添加
+    if (prePoint && nextPoint) {
+      if (
+        point.x === prePoint.x &&
+        point.x === nextPoint.x &&
+        ((point.y > prePoint.y && point.y < nextPoint.y) ||( point.y < prePoint.y && point.y > nextPoint.y))
+      )
+        return result
+
+      if (
+        point.y === prePoint.y &&
+        point.y === nextPoint.y &&
+        ((point.x > prePoint.x && point.x < nextPoint.x) || (point.x < prePoint.x && point.x > nextPoint.x))
+      )
+        return result
+    }
+
+    return result + ` L${point.x},${point.y}`
+  }, '')
+
+  // 创建合并路径点
+  const d = [path, ...clipPaths].reduce<string>((d, points, index) => {
+    const _d = createPath(points)
+
+    return index === 0 ? _d : `${d} ${_d}`
+  }, '')
+
+  pathElement.setAttribute('d', d)
+  pathElement.setAttribute('fill', fill)
+  pathElement.setAttribute('fill-opacity', `${opacity}`)
+  pathElement.setAttribute('fill-rule', 'evenodd')
+
+  return pathElement
 }

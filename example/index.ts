@@ -4,8 +4,14 @@ const main = () => {
   const sourceImage = document.querySelector('#source') as HTMLImageElement
   const effect = document.querySelector('#effect') as HTMLDivElement
 
-  const svg = imageToSvg(sourceImage)
-  if (svg) effect.appendChild(svg)
+  // sourceImage.onload = () => {
+  const result = imageToSvg(sourceImage)
+  if (result) {
+    const { canvas, svg } = result
+    // sourceImage.src = canvas.toDataURL()
+    effect.appendChild(svg)
+  }
+  // }
 }
 
 main()
