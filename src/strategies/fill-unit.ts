@@ -1,6 +1,7 @@
 import { createRectElement } from "../utils/create-svg-elements"
 import forEachImagePixel from "../utils/foreach-image-pixel"
 
+
 /**
  * 填充每一个单位色块
  */

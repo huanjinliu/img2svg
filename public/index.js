@@ -101,7 +101,7 @@
     pathElement.setAttribute('fill', fill);
     pathElement.setAttribute('fill-opacity', "".concat(opacity));
     pathElement.setAttribute('fill-rule', 'evenodd');
-    pathElement.setAttribute('stroke', 'red');
+    // pathElement.setAttribute('stroke', 'red')
     return pathElement;
   };
 
@@ -155,11 +155,10 @@
       B2 = color2.b;
       color2.a;
     var _options$float = options["float"],
-      _float = _options$float === void 0 ? 0.02 : _options$float;
+      _float = _options$float === void 0 ? 0 : _options$float;
       options.ignoreOpacity;
     var similarity = 1 - Math.sqrt(Math.pow(R2 - R1, 2) + Math.pow(G2 - G1, 2) + Math.pow(B2 - B1, 2)) / Math.sqrt(Math.pow(255, 2) + Math.pow(255, 2) + Math.pow(255, 2));
-    if (!(1 - similarity < _float)) console.log(similarity);
-    return 1 - similarity < _float;
+    return 1 - similarity <= _float;
   };
 
   /**
@@ -449,9 +448,7 @@
       width: canvas.width,
       height: canvas.height
     });
-    // 方案一：填充每一个单位色块
-    // fillUnit(svg, imageData)
-    // 方案二：填充区域色块
+    // 寻找区域色块
     fillArea(svg, imageData);
     return {
       canvas: canvas,

@@ -1,4 +1,4 @@
-import { createPathElement, createRectElement, Point, SVG_NAMESPACE } from "../utils/create-svg-elements";
+import { createPathElement, Point } from "../utils/create-svg-elements";
 import forEachImagePixel from "../utils/foreach-image-pixel"
 import { RGBA } from "../utils/get-pixel-rgba";
 import isSameColor from "../utils/is-same-color";

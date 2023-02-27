@@ -1,6 +1,4 @@
-import fillAreaArray from "./strategies/fill-area-array"
-import fillAreaList from "./strategies/fill-area-list"
-import fillUnit from "./strategies/fill-unit"
+import fillAreaWithColorMerge from "./strategies/fill-area-with-color-merge"
 import { createSvgElement } from "./utils/create-svg-elements"
 
 /**
@@ -44,37 +42,57 @@ const image2svg = (image: HTMLImageElement) => {
   const ctx = canvas.getContext('2d')
   if (!ctx) return
 
-  // createTestImage(canvas, 3, 3, [
+  // createTestImage(canvas, 5, 5, [
   //   {
   //     row: 0,
   //     col: 0,
-  //     color: 'rgba(255, 0, 0, .5)'
+  //     color: 'rgba(255, 0, 0, 0)'
   //   },
   //   {
   //     row: 1,
   //     col: 1,
-  //     color: 'rgba(255, 0, 0, .5)'
+  //     color: 'rgba(255, 0, 0, 0)'
   //   },
-  //   // {
-  //   //   row: 1,
-  //   //   col: 2,
-  //   //   color: 'rgba(255, 0, 0, .5)'
-  //   // },
-  //   // {
-  //   //   row: 1,
-  //   //   col: 3,
-  //   //   color: 'rgba(255, 0, 0, .5)'
-  //   // },
-  //   // {
-  //   //   row: 2,
-  //   //   col: 1,
-  //   //   color: 'rgba(255, 0, 0, .5)'
-  //   // },
-  //   // {
-  //   //   row: 2,
-  //   //   col: 3,
-  //   //   color: 'rgba(255, 0, 0, .5)'
-  //   // }
+  //   {
+  //     row: 2,
+  //     col: 2,
+  //     color: 'rgba(255, 0, 0, 0)'
+  //   },
+  //   {
+  //     row: 3,
+  //     col: 3,
+  //     color: 'rgba(255, 0, 0, 0)'
+  //   },
+  //   {
+  //     row: 0,
+  //     col: 3,
+  //     color: 'rgba(255, 0, 0, 0)'
+  //   },
+  //   {
+  //     row: 1,
+  //     col: 4,
+  //     color: 'rgba(255, 0, 0, 0)'
+  //   },
+  //   {
+  //     row: 3,
+  //     col: 0,
+  //     color: 'rgba(255, 0, 0, 0)'
+  //   },
+  //   {
+  //     row: 4,
+  //     col: 1,
+  //     color: 'rgba(255, 0, 0, 0)'
+  //   },
+  //   {
+  //     row: 4,
+  //     col: 0,
+  //     color: 'rgba(255, 0, 0, 0)'
+  //   },
+  //   {
+  //     row: 0,
+  //     col: 4,
+  //     color: 'rgba(255, 0, 0, 0)'
+  //   },
   // ])
 
   ctx.imageSmoothingEnabled = false
@@ -88,11 +106,8 @@ const image2svg = (image: HTMLImageElement) => {
     height: canvas.height,
   })
 
-  // 方案一：填充每一个单位色块
-  // fillUnit(svg, imageData)
-
-  // 方案二：填充区域色块
-  fillAreaArray(svg, imageData)
+  // 寻找区域色块
+  fillAreaWithColorMerge(svg, imageData)
 
   return { canvas, svg }
 }

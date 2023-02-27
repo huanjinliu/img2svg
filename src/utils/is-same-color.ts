@@ -9,13 +9,12 @@ const isSameColor = (color1: RGBA, color2: RGBA, options: Partial<{
   // 忽略透明度
   ignoreOpacity: boolean;
 }> = {}) => {
+  const { r: R1, g: G1, b: B1, a: A1 } = color1;
+  const { r: R2, g: G2, b: B2, a: A2 } = color2;
   const { float = 0, ignoreOpacity = false } = options
-  return (
-    Math.abs(color1.r - color2.r) <= float &&
-    Math.abs(color1.g - color2.g) <= float &&
-    Math.abs(color1.b - color2.b) <= float &&
-    (ignoreOpacity || Math.abs(color1.a - color2.a) <= float)
-  )
+  const similarity = 1 - (Math.sqrt(Math.pow(R2-R1,2) + Math.pow(G2-G1,2) + Math.pow(B2-B1,2)))/ (Math.sqrt(Math.pow(255, 2) + Math.pow(255, 2) + Math.pow(255, 2)))
+
+  return 1 - similarity <= float
 }
 
 export default isSameColor

@@ -62,8 +62,33 @@ export const createPathElement = (attrs: {
   fill?: string,
   opacity?: number,
 }) => {
-  const { path, clipPaths = [], fill = '#000', opacity = 1 } = attrs;
+  const { path: originPath, clipPaths = [], fill = '#000', opacity = 1 } = attrs;
   const pathElement = document.createElementNS(SVG_NAMESPACE, 'path')
+  const dump = 2;
+
+  // const calcAngleBetweenPoints = (point: Point, origin?: Point) => {
+  //   if (!origin) return 0;
+
+  //   const d = {
+  //     x: point.x - origin.x,
+  //     y: point.y - origin.y
+  //   }
+
+  //   return Math.atan2(d.y, d.x) / (Math.PI / 180);
+  // }
+
+  // const path: (Point & { angles: number[] })[] = []
+
+  // Array.from({ length: dump }).forEach((_, step) => {
+  //   originPath.forEach((point, index, arr) => {
+  //     if (!path[index]) path[index] = { angles: [], ...point }
+
+  //     const originStep = step + 1
+  //     const originPoint = arr[index >= originStep ? index - originStep : arr.length + (index - originStep)]
+  //     path[index].angles.push(calcAngleBetweenPoints(point, originPoint))
+  //   })
+  // })
+  // console.log(path)
 
   // 创建路径点
   const createPath = (points: Point[]) => points.reduce<string>((result, point, index, arr) => {
@@ -92,7 +117,7 @@ export const createPathElement = (attrs: {
   }, '')
 
   // 创建合并路径点
-  const d = [path, ...clipPaths].reduce<string>((d, points, index) => {
+  const d = [originPath, ...clipPaths].reduce<string>((d, points, index) => {
     const _d = createPath(points)
 
     return index === 0 ? _d : `${d} ${_d}`
@@ -102,6 +127,7 @@ export const createPathElement = (attrs: {
   pathElement.setAttribute('fill', fill)
   pathElement.setAttribute('fill-opacity', `${opacity}`)
   pathElement.setAttribute('fill-rule', 'evenodd')
+  // pathElement.setAttribute('stroke', 'red')
 
   return pathElement
 }
