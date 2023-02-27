@@ -52,7 +52,7 @@
    * @returns 路径区域
    */
   var createPathElement = function createPathElement(attrs) {
-    var path = attrs.path,
+    var originPath = attrs.path,
       _attrs$clipPaths = attrs.clipPaths,
       clipPaths = _attrs$clipPaths === void 0 ? [] : _attrs$clipPaths,
       _attrs$fill = attrs.fill,
@@ -60,6 +60,24 @@
       _attrs$opacity = attrs.opacity,
       opacity = _attrs$opacity === void 0 ? 1 : _attrs$opacity;
     var pathElement = document.createElementNS(SVG_NAMESPACE, 'path');
+    // const calcAngleBetweenPoints = (point: Point, origin?: Point) => {
+    //   if (!origin) return 0;
+    //   const d = {
+    //     x: point.x - origin.x,
+    //     y: point.y - origin.y
+    //   }
+    //   return Math.atan2(d.y, d.x) / (Math.PI / 180);
+    // }
+    // const path: (Point & { angles: number[] })[] = []
+    // Array.from({ length: dump }).forEach((_, step) => {
+    //   originPath.forEach((point, index, arr) => {
+    //     if (!path[index]) path[index] = { angles: [], ...point }
+    //     const originStep = step + 1
+    //     const originPoint = arr[index >= originStep ? index - originStep : arr.length + (index - originStep)]
+    //     path[index].angles.push(calcAngleBetweenPoints(point, originPoint))
+    //   })
+    // })
+    // console.log(path)
     // 创建路径点
     var createPath = function createPath(points) {
       return points.reduce(function (result, point, index, arr) {
@@ -75,7 +93,7 @@
       }, '');
     };
     // 创建合并路径点
-    var d = [path].concat(_toConsumableArray(clipPaths)).reduce(function (d, points, index) {
+    var d = [originPath].concat(_toConsumableArray(clipPaths)).reduce(function (d, points, index) {
       var _d = createPath(points);
       return index === 0 ? _d : "".concat(d, " ").concat(_d);
     }, '');
@@ -83,6 +101,7 @@
     pathElement.setAttribute('fill', fill);
     pathElement.setAttribute('fill-opacity', "".concat(opacity));
     pathElement.setAttribute('fill-rule', 'evenodd');
+    pathElement.setAttribute('stroke', 'red');
     return pathElement;
   };
 
@@ -127,11 +146,20 @@
    */
   var isSameColor = function isSameColor(color1, color2) {
     var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+    var R1 = color1.r,
+      G1 = color1.g,
+      B1 = color1.b;
+      color1.a;
+    var R2 = color2.r,
+      G2 = color2.g,
+      B2 = color2.b;
+      color2.a;
     var _options$float = options["float"],
-      _float = _options$float === void 0 ? 0 : _options$float,
-      _options$ignoreOpacit = options.ignoreOpacity,
-      ignoreOpacity = _options$ignoreOpacit === void 0 ? false : _options$ignoreOpacit;
-    return Math.abs(color1.r - color2.r) <= _float && Math.abs(color1.g - color2.g) <= _float && Math.abs(color1.b - color2.b) <= _float && (ignoreOpacity || Math.abs(color1.a - color2.a) <= _float);
+      _float = _options$float === void 0 ? 0.02 : _options$float;
+      options.ignoreOpacity;
+    var similarity = 1 - Math.sqrt(Math.pow(R2 - R1, 2) + Math.pow(G2 - G1, 2) + Math.pow(B2 - B1, 2)) / Math.sqrt(Math.pow(255, 2) + Math.pow(255, 2) + Math.pow(255, 2));
+    if (!(1 - similarity < _float)) console.log(similarity);
+    return 1 - similarity < _float;
   };
 
   /**
@@ -361,37 +389,57 @@
     canvas.height = image.naturalHeight;
     var ctx = canvas.getContext('2d');
     if (!ctx) return;
-    // createTestImage(canvas, 3, 3, [
+    // createTestImage(canvas, 5, 5, [
     //   {
     //     row: 0,
     //     col: 0,
-    //     color: 'rgba(255, 0, 0, .5)'
+    //     color: 'rgba(255, 0, 0, 0)'
     //   },
     //   {
     //     row: 1,
     //     col: 1,
-    //     color: 'rgba(255, 0, 0, .5)'
+    //     color: 'rgba(255, 0, 0, 0)'
     //   },
-    //   // {
-    //   //   row: 1,
-    //   //   col: 2,
-    //   //   color: 'rgba(255, 0, 0, .5)'
-    //   // },
-    //   // {
-    //   //   row: 1,
-    //   //   col: 3,
-    //   //   color: 'rgba(255, 0, 0, .5)'
-    //   // },
-    //   // {
-    //   //   row: 2,
-    //   //   col: 1,
-    //   //   color: 'rgba(255, 0, 0, .5)'
-    //   // },
-    //   // {
-    //   //   row: 2,
-    //   //   col: 3,
-    //   //   color: 'rgba(255, 0, 0, .5)'
-    //   // }
+    //   {
+    //     row: 2,
+    //     col: 2,
+    //     color: 'rgba(255, 0, 0, 0)'
+    //   },
+    //   {
+    //     row: 3,
+    //     col: 3,
+    //     color: 'rgba(255, 0, 0, 0)'
+    //   },
+    //   {
+    //     row: 0,
+    //     col: 3,
+    //     color: 'rgba(255, 0, 0, 0)'
+    //   },
+    //   {
+    //     row: 1,
+    //     col: 4,
+    //     color: 'rgba(255, 0, 0, 0)'
+    //   },
+    //   {
+    //     row: 3,
+    //     col: 0,
+    //     color: 'rgba(255, 0, 0, 0)'
+    //   },
+    //   {
+    //     row: 4,
+    //     col: 1,
+    //     color: 'rgba(255, 0, 0, 0)'
+    //   },
+    //   {
+    //     row: 4,
+    //     col: 0,
+    //     color: 'rgba(255, 0, 0, 0)'
+    //   },
+    //   {
+    //     row: 0,
+    //     col: 4,
+    //     color: 'rgba(255, 0, 0, 0)'
+    //   },
     // ])
     ctx.imageSmoothingEnabled = false;
     ctx.drawImage(image, 0, 0);
@@ -414,6 +462,25 @@
   const main = () => {
       const sourceImage = document.querySelector('#source');
       const effect = document.querySelector('#effect');
+      let zoom = 1;
+      let offset = {
+          x: 0,
+          y: 0
+      };
+      let initPos;
+      let movePos;
+      const transform = (options = {}) => {
+          if (options.zoom)
+              zoom = options.zoom;
+          if (options.offset)
+              offset = options.offset;
+          const style = `
+      transform: scale(${zoom}) translate(${offset.x}px, ${offset.y}px);
+      cursor: ${movePos ? 'grabbing' : `grab`};
+    `;
+          effect.setAttribute('style', style);
+          sourceImage.setAttribute('style', style);
+      };
       // sourceImage.onload = () => {
       const result = image2svg(sourceImage);
       if (result) {
@@ -422,6 +489,29 @@
           effect.appendChild(svg);
       }
       // }
+      effect.onwheel = (e) => {
+          const dZoom = Math.pow(0.999, (e.deltaY / 2));
+          transform({ zoom: zoom * dZoom });
+      };
+      effect.onmousedown = (e) => {
+          initPos = offset;
+          movePos = { x: e.x, y: e.y };
+      };
+      effect.onmouseup = () => {
+          initPos = undefined;
+          movePos = undefined;
+          transform();
+      };
+      effect.onmousemove = (e) => {
+          if (movePos) {
+              transform({
+                  offset: {
+                      x: (initPos !== null && initPos !== void 0 ? initPos : offset).x + (e.x - movePos.x) / zoom,
+                      y: (initPos !== null && initPos !== void 0 ? initPos : offset).y + (e.y - movePos.y) / zoom,
+                  }
+              });
+          }
+      };
   };
   main();
 
